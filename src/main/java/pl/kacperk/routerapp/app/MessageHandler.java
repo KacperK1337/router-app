@@ -28,28 +28,28 @@ import static pl.kacperk.routerapp.router.model.RouterStatus.WORKING;
 @RequiredArgsConstructor
 public class MessageHandler {
     private final RouterServiceImpl routerService;
-    private final Map<String, List<Message>> IPMessagesMap = new ConcurrentHashMap<>();
-    private final Set<String> ignoredIPs = ConcurrentHashMap.newKeySet();
+    private final Map<String, List<Message>> ipMessagesMap = new ConcurrentHashMap<>();
+    private final Set<String> ignoredIps = ConcurrentHashMap.newKeySet();
     private final int messagesRateSec = 60;
     private final int messagesMaxDelaySec = 30;
 
     public void addMessage(Message msg) {
-        String IPAddress = msg.getIPAddress();
-        if (!ignoredIPs.contains(IPAddress)) {
-            List<Message> messages = IPMessagesMap.get(IPAddress);
+        String ipAddress = msg.getIpAddress();
+        if (!ignoredIps.contains(ipAddress)) {
+            List<Message> messages = ipMessagesMap.get(ipAddress);
             if (messages != null) {
                 messages.add(msg);
             } else {
-                IPMessagesMap.put(IPAddress, new ArrayList<>(List.of(msg)));
-                routerService.addRouter(IPAddress);
+                ipMessagesMap.put(ipAddress, new ArrayList<>(List.of(msg)));
+                routerService.addRouter(ipAddress);
             }
         }
     }
 
     private Map<String, List<Message>> prepareMapCopy() {
-        Map<String, List<Message>> IPMessagesMapPortion = new HashMap<>(IPMessagesMap);
+        Map<String, List<Message>> ipMessagesMapCopy = new HashMap<>(ipMessagesMap);
 
-        IPMessagesMapPortion.values() //ignore max delays
+        ipMessagesMapCopy.values() //ignore max delays
                 .forEach(messages -> {
                     ListIterator<Message> iterator = messages.listIterator();
                     Message previousMsg = iterator.next();
@@ -63,9 +63,9 @@ public class MessageHandler {
                         previousMsg = currentMsg;
                     }
                 });
-        IPMessagesMapPortion.values() //sort by timestamps
+        ipMessagesMapCopy.values() //sort by timestamps
                 .forEach(messages -> messages.sort(Comparator.comparing(Message::getTimestamp)));
-        return IPMessagesMapPortion;
+        return ipMessagesMapCopy;
     }
 
     private RouterStatus findPossibleRouterStatus(List<Message> messages) {
@@ -91,23 +91,23 @@ public class MessageHandler {
     }
 
     private void createRouters(Map<String, List<Message>> messagesMap) {
-        messagesMap.forEach((IPAddress, messages) -> {
+        messagesMap.forEach((ipAddress, messages) -> {
             RouterStatus possibleStatus = findPossibleRouterStatus(messages);
             if (possibleStatus.equals(MALFUNCTION)) {
-                routerService.updateRouterStatus(IPAddress, MALFUNCTION);
-                ignoredIPs.add(IPAddress);
+                routerService.updateRouterStatus(ipAddress, MALFUNCTION);
+                ignoredIps.add(ipAddress);
             } else {
-                RouterStatus currentStatus = routerService.getRouterByIP(IPAddress).getRouterStatus();
+                RouterStatus currentStatus = routerService.getRouterByIP(ipAddress).getRouterStatus();
                 if (possibleStatus.equals(LOST)) {
                     if (currentStatus.equals(WORKING)) {
-                        routerService.updateRouterStatus(IPAddress, DISCONNECTED);
+                        routerService.updateRouterStatus(ipAddress, DISCONNECTED);
                     } else if (currentStatus.equals(DISCONNECTED)) {
-                        routerService.updateRouterStatus(IPAddress, LOST);
-                        ignoredIPs.add(IPAddress);
+                        routerService.updateRouterStatus(ipAddress, LOST);
+                        ignoredIps.add(ipAddress);
                     }
                 } else {
                     if (currentStatus.equals(DISCONNECTED)) {
-                        routerService.updateRouterStatus(IPAddress, WORKING);
+                        routerService.updateRouterStatus(ipAddress, WORKING);
                     }
                 }
             }
@@ -115,7 +115,7 @@ public class MessageHandler {
     }
 
     private void removeResolvedRouters() {
-        ignoredIPs.forEach(IPMessagesMap::remove);
+        ignoredIps.forEach(ipMessagesMap::remove);
     }
 
     @Scheduled(fixedRate = messagesRateSec * 1000, initialDelay = messagesRateSec * 1000)

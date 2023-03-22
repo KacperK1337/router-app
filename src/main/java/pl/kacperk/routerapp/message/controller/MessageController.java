@@ -1,5 +1,6 @@
 package pl.kacperk.routerapp.message.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class MessageController {
     private final MessageServiceImpl messageService;
 
     @PostMapping("/send")
-    public ResponseEntity<MessageResponseDto> sendMessage(@RequestBody MessageRequestDto requestDto) {
+    public ResponseEntity<MessageResponseDto> sendMessage(@Valid @RequestBody final MessageRequestDto requestDto) {
         MessageResponseDto responseDto = messageService.sendMessage(requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }

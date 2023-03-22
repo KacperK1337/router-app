@@ -7,6 +7,6 @@ import pl.kacperk.routerapp.router.model.Router;
 @Repository
 public interface RouterRepo extends JpaRepository<Router, Long> {
 
-    Router getRouterByIPAddress(String IPAddress);
+    Router getRouterByIpAddress(String ipAddress);
 
 }

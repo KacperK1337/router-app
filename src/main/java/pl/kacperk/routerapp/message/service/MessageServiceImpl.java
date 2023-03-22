@@ -7,6 +7,7 @@ import pl.kacperk.routerapp.message.dto.MessageDtoMapper;
 import pl.kacperk.routerapp.message.dto.MessageRequestDto;
 import pl.kacperk.routerapp.message.dto.MessageResponseDto;
 import pl.kacperk.routerapp.message.model.Message;
+import pl.kacperk.routerapp.message.model.MessageStatus;
 
 import java.time.Instant;
 
@@ -19,14 +20,14 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public MessageResponseDto sendMessage(MessageRequestDto requestDto) {
         Message message = new Message();
-        message.setIPAddress(
-                requestDto.getIPAddress()
+        message.setIpAddress(
+                requestDto.getIpAddress()
         );
         message.setTimestamp(
                 Instant.now().getEpochSecond()
         );
         message.setMessageStatus(
-                requestDto.getMessageStatus()
+                MessageStatus.valueOf(requestDto.getMessageStatus())
         );
         messageHandler.addMessage(message);
         return MessageDtoMapper.messageToMessageResponseDto(message);

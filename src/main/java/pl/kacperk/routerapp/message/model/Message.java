@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor //to test
 public class Message {
-    private String IPAddress;
+    private String ipAddress;
     private long timestamp;
     private MessageStatus messageStatus;
 

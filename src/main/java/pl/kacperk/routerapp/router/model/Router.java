@@ -40,7 +40,7 @@ public class Router {
             columnDefinition = "varchar(39)",
             nullable = false
     )
-    private String IPAddress;
+    private String ipAddress;
 
     @Column(
             name = "messageStatus",

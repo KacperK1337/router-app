@@ -5,10 +5,10 @@ import pl.kacperk.routerapp.router.model.RouterStatus;
 
 public interface RouterService {
 
-    void addRouter(String IPAddress);
+    void addRouter(String ipAddress);
 
-    Router getRouterByIP(String IPAddress);
+    Router getRouterByIP(String ipAddress);
 
-    void updateRouterStatus(String IPAddress, RouterStatus routerStatus);
+    void updateRouterStatus(String ipAddress, RouterStatus routerStatus);
 
 }

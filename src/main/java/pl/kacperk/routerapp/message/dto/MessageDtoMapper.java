@@ -7,7 +7,7 @@ public class MessageDtoMapper {
 
     public static MessageResponseDto messageToMessageResponseDto(@NonNull Message message) {
         return MessageResponseDto.builder()
-                .IPAddress(message.getIPAddress())
+                .ipAddress(message.getIpAddress())
                 .timestamp(message.getTimestamp())
                 .messageStatus(message.getMessageStatus().name())
                 .build();

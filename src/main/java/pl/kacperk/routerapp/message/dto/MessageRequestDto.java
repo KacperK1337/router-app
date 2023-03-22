@@ -2,12 +2,14 @@ package pl.kacperk.routerapp.message.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.kacperk.routerapp.message.model.MessageStatus;
+import jakarta.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @Getter
 public class MessageRequestDto {
-    private String IPAddress;
-    private MessageStatus messageStatus;
+    @NotNull
+    private String ipAddress;
+    @NotNull
+    private String messageStatus;
 
 }

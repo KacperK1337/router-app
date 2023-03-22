@@ -13,24 +13,24 @@ public class RouterServiceImpl implements RouterService {
     private final RouterRepo routerRepo;
 
     @Override
-    public void addRouter(String IPAddress) {
+    public void addRouter(String ipAddress) {
         Router router = new Router();
-        router.setIPAddress(IPAddress);
+        router.setIpAddress(ipAddress);
         router.setRouterStatus(RouterStatus.WORKING);
         routerRepo.save(router);
-        System.out.println("Added new working router with ip: " + IPAddress);
+        System.out.println("Added new working router with ip: " + ipAddress);
     }
 
     @Override
-    public Router getRouterByIP(String IPAddress) {
-        return routerRepo.getRouterByIPAddress(IPAddress);
+    public Router getRouterByIP(String ipAddress) {
+        return routerRepo.getRouterByIpAddress(ipAddress);
     }
 
     @Transactional
     @Override
-    public void updateRouterStatus(String IPAddress, RouterStatus routerStatus) {
-        Router router = getRouterByIP(IPAddress);
-        System.out.println("Changed router with ip: " + IPAddress + " from status "
+    public void updateRouterStatus(String ipAddress, RouterStatus routerStatus) {
+        Router router = getRouterByIP(ipAddress);
+        System.out.println("Changed router with ip: " + ipAddress + " from status "
                 + router.getRouterStatus().name() + " to status " + routerStatus.name());
         router.setRouterStatus(routerStatus);
     }
