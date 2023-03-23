@@ -8,5 +8,5 @@ import lombok.Getter;
 public class MessageResponseDto {
     private String ipAddress;
     private long timestamp;
-    private String messageStatus;
+    private String status;
 }

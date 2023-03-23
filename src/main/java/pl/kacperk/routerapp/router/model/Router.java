@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +19,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity(name = "Router")
 @Table(
-        name = "routers"
+        name = "routers",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "router_ip_address_unique", columnNames = "ip_address")
+        }
 )
 public class Router {
     @Id
@@ -43,9 +47,9 @@ public class Router {
     private String ipAddress;
 
     @Column(
-            name = "messageStatus",
+            name = "status",
             nullable = false
     )
     @Enumerated(EnumType.STRING)
-    private RouterStatus routerStatus;
+    private RouterStatus status;
 }

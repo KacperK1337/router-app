@@ -10,6 +10,5 @@ public class MessageRequestDto {
     @NotNull
     private String ipAddress;
     @NotNull
-    private String messageStatus;
-
+    private String status;
 }
